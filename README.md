@@ -39,8 +39,8 @@ This template demonstrates how to build an AI-powered chat interface using Cloud
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/cloudflare/templates.git
-   cd templates/llm-chat-app
+   git clone https://github.com/ozekimasaki/llm-chat-app-template.git
+   cd llm-chat-app-template
    ```
 
 2. Install dependencies:
@@ -49,7 +49,7 @@ This template demonstrates how to build an AI-powered chat interface using Cloud
    npm install
    ```
 
-3. Generate Worker type definitions:
+3. Generate Worker type definitions (writes `worker-configuration.d.ts`):
    ```bash
    npm run cf-typegen
    ```
@@ -79,23 +79,37 @@ npm run deploy
 View real-time logs associated with any deployed Worker:
 
 ```bash
-npm wrangler tail
+npx wrangler tail
 ```
+
+### Available Scripts
+
+The following npm scripts are defined in `package.json`:
+
+| Script | Command | Description |
+| --- | --- | --- |
+| `npm run dev` | `wrangler dev` | Start a local development server. |
+| `npm start` | `wrangler dev` | Alias for `npm run dev`. |
+| `npm run check` | `tsc --noEmit && wrangler deploy --dry-run` | Type-check the code and validate the deploy configuration without deploying. |
+| `npm test` | `vitest` | Run the test suite with Vitest (configured via `@cloudflare/vitest-pool-workers`). |
+| `npm run cf-typegen` | `wrangler types` | Regenerate Worker binding type definitions. |
+| `npm run deploy` | `wrangler deploy` | Deploy the Worker to Cloudflare. |
 
 ## Project Structure
 
 ```
 /
-├── public/             # Static assets
-│   ├── index.html      # Chat UI HTML
-│   └── chat.js         # Chat UI frontend script
+├── public/                     # Static assets served via the ASSETS binding
+│   ├── index.html              # Chat UI HTML and inline styles
+│   └── chat.js                 # Chat UI frontend script
 ├── src/
-│   ├── index.ts        # Main Worker entry point
-│   └── types.ts        # TypeScript type definitions
-├── test/               # Test files
-├── wrangler.jsonc      # Cloudflare Worker configuration
-├── tsconfig.json       # TypeScript configuration
-└── README.md           # This documentation
+│   ├── index.ts                # Main Worker entry point and /api/chat handler
+│   └── types.ts                # TypeScript type definitions (Env, ChatMessage)
+├── worker-configuration.d.ts   # Generated Worker binding types (npm run cf-typegen)
+├── wrangler.jsonc              # Cloudflare Worker configuration
+├── tsconfig.json               # TypeScript configuration
+├── package.json                # Dependencies and scripts
+└── README.md                   # This documentation
 ```
 
 ## How It Works
@@ -151,3 +165,7 @@ The UI styling is contained in the `<style>` section of `public/index.html`. You
 - [Cloudflare Workers Documentation](https://developers.cloudflare.com/workers/)
 - [Cloudflare Workers AI Documentation](https://developers.cloudflare.com/workers-ai/)
 - [Workers AI Models](https://developers.cloudflare.com/workers-ai/models/)
+
+## License
+
+Released under the MIT License, as declared in the source header of `src/index.ts`.
